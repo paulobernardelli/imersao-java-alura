@@ -34,7 +34,9 @@ public class LinguagemController {
 	@PostMapping ("/linguagem")
 	public Linguagem gravaLinguagem(@RequestBody Linguagem linguagem) {
 		return repositorio.save(linguagem);
-	}	
+	}
+	
+	//teste
 	
 	@PutMapping ("/linguagem/{id}")
 	public  Map<String, Boolean> atualizaLinguagem(@PathVariable(value = "id") String linguagemId, @RequestBody Linguagem linguagemDetails)
