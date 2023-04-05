@@ -1,0 +1,19 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class GeraEstrelas {
+	
+	public List<String> classificacao (int pontuacao){
+		
+		List <String> estrelas = new ArrayList<>();
+		
+		for (int i=0;i<pontuacao;i++) {
+			estrelas.add("x");
+						
+		}
+		
+		return estrelas;
+		
+	}
+
+}

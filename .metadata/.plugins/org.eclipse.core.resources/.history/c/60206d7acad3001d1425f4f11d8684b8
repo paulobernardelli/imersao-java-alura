@@ -1,0 +1,81 @@
+package br.com.alura.linguagens.api;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.management.AttributeNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.cvc.template.model.Pessoa;
+
+@RestController
+public class LinguagemController {
+	
+	@Autowired	
+	private LinguagemRepository repositorio;
+	
+		
+	@GetMapping(value="/linguagens")
+	public List<Linguagem> obterLinguagens() {
+		List<Linguagem> linguagens = repositorio.findAll();
+		return linguagens;
+		}
+	
+	@PostMapping (value="/linguagem")
+	public Linguagem gravaLinguagem(@RequestBody Linguagem linguagem) {
+		return repositorio.save(linguagem);
+	}
+	
+	@PutMapping (value="/linguagem/{id}")
+	public  Map<String, Boolean> atualizaLinguagem(@PathVariable(value = "id") String linguagemId, @RequestBody Linguagem linguagemDetails)
+		throws AttributeNotFoundException {
+			
+			
+			Linguagem linguagem = repositorio.findById(linguagemId)
+					.orElseThrow(() -> new AttributeNotFoundException("Linguagem not found for this id :: " + linguagemId));
+
+			
+			linguagem.setTitle(linguagemDetails.getTitle());
+			linguagem.setImage(linguagemDetails.getImage());
+			linguagem.setRanking(linguagemDetails.getRanking());
+			
+			final Linguagem updatedLinguagem = repositorio.save(linguagem);
+			//return ResponseEntity.ok(updatedLinguagem);
+			
+			Map<String, Boolean> response = new HashMap<>();
+			response.put("deleted", Boolean.TRUE);
+			return response;
+			
+			
+			
+		}
+	
+	@DeleteMapping (value="/linguagem/{id}")
+	public Map<String, Boolean> deleteLinguagem(@PathVariable(value = "id") String linguagemId)
+		throws AttributeNotFoundException {
+			
+			
+			Linguagem linguagem = repositorio.findById(linguagemId)
+					.orElseThrow(() -> new AttributeNotFoundException("Linguagem not found for this id :: " + linguagemId));
+
+			
+			repositorio.delete(linguagem);
+			Map<String, Boolean> response = new HashMap<>();
+			response.put("deleted", Boolean.TRUE);
+			return response;
+		}
+	}
+		
+		
+	
+
